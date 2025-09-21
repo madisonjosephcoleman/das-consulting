@@ -1,5 +1,5 @@
-# A string used to distinguish different Supabase projects on the same host. Defaults to the
-# working directory name when running `supabase init`.
+# DAS Consulting Supabase Project Configuration
+# This project has its own dedicated Supabase instance
 project_id = "das-consulting"
 
 [api]
@@ -128,8 +128,7 @@ redirect_uri = ""
 # or any other third-party OIDC providers.
 url = ""
 
-[edge_functions]
-enabled = true
-# Configure one of the supported request policies: `oneshot`, `per_worker`.
-# Use `oneshot` for hot reload, or `per_worker` for load testing.
-request_policy = "oneshot"
+# Edge Functions configuration (commented out for compatibility)
+# [edge_functions]
+# enabled = true
+# request_policy = "oneshot"

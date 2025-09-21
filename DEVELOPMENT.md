@@ -51,8 +51,8 @@
 This project uses Supabase for backend services. You have two options for development:
 
 #### Option 1: Use Production Supabase (Recommended for quick start)
-1. Create a Supabase project at [supabase.com](https://supabase.com)
-2. Copy your project URL and anon key to `.env.local`
+1. Create a dedicated Supabase project for DAS Consulting at [supabase.com](https://supabase.com)
+2. Copy your DAS Consulting project URL and anon key to `.env.local`
 3. Start developing immediately
 
 #### Option 2: Use Local Supabase (Recommended for full development)
@@ -61,6 +61,8 @@ This project uses Supabase for backend services. You have two options for develo
 3. The local Supabase URL and keys will be displayed
 4. Copy them to your `.env.local` file
 5. Use `supabase stop` to stop local services when done
+
+**Note**: This project has its own dedicated Supabase instance. Other projects (rent-roll, finops-tool) maintain separate Supabase instances.
 
 ### Project Structure
 

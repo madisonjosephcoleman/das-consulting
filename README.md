@@ -134,10 +134,12 @@ The site is hosted on **Cloudflare Workers** and integrated with GitHub for CI/C
    ```
 
 ### Production Deployment
-1. Create a Supabase project at [supabase.com](https://supabase.com)
+1. Create a dedicated Supabase project for DAS Consulting at [supabase.com](https://supabase.com)
 2. Deploy to Vercel:
    - Connect your GitHub repository to Vercel
    - Add environment variables in Vercel dashboard:
-     - `VITE_SUPABASE_URL`: Your Supabase project URL
-     - `VITE_SUPABASE_ANON_KEY`: Your Supabase anon key
+     - `VITE_SUPABASE_URL`: Your DAS Consulting Supabase project URL
+     - `VITE_SUPABASE_ANON_KEY`: Your DAS Consulting Supabase anon key
 3. Deploy and your site will be live!
+
+**Note**: This project uses its own dedicated Supabase instance. Other projects (rent-roll, finops-tool) will have their own separate Supabase instances.
