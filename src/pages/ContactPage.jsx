@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, Send, MessageCircle, Clock, CheckCircle } from 'lucide-react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import supabase, { db } from '../lib/supabase'
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -27,14 +28,40 @@ const ContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
+
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      company: formData.company || null,
+      phone: formData.phone || null,
+      service: formData.service || null,
+      message: formData.message
+    }
+
+    // Insert without returning rows to avoid requiring SELECT permissions
+    const { error } = await supabase.from('contact_messages').insert(payload)
+
     setIsSubmitting(false)
+
+    if (error) {
+      console.error('[ContactForm] Insert error', { error, payload })
+      alert(`There was a problem submitting your message: ${error.message || 'Unknown error'}`)
+      return
+    }
+
+    try {
+      const { error: fnError } = await supabase.functions.invoke('send-contact-email', {
+        body: { message: payload }
+      })
+      if (fnError) {
+        console.error('[ContactForm] Email function error', fnError)
+      }
+    } catch (err) {
+      console.error('[ContactForm] Email function invocation failed', err)
+    }
+
     setIsSubmitted(true)
-    
-    // Reset form after 3 seconds
+
     setTimeout(() => {
       setIsSubmitted(false)
       setFormData({
@@ -242,21 +269,8 @@ const ContactPage = () => {
               >
                 {/* Contact Methods */}
                 <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-8">
-                  <h3 className="text-xl font-heading font-semibold text-white mb-6">Get in Touch</h3>
+                  <h3 className="text-xl font-heading font-semibold text-white mb-6">Other ways to reach us</h3>
                   <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <h4 className="text-white font-semibold mb-1">Email Us</h4>
-                        <p className="text-gray-300 mb-2">Send us an email anytime</p>
-                        <a href="mailto:madison@das.consulting" className="text-primary hover:text-primary/80 transition-colors">
-                          madison@das.consulting
-                        </a>
-                      </div>
-                    </div>
-
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center flex-shrink-0">
                         <MessageCircle className="w-6 h-6 text-primary" />

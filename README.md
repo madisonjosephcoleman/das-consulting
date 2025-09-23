@@ -143,3 +143,42 @@ The site is hosted on **Cloudflare Workers** and integrated with GitHub for CI/C
 3. Deploy and your site will be live!
 
 **Note**: This project uses its own dedicated Supabase instance. Other projects (rent-roll, finops-tool) will have their own separate Supabase instances.
+
+---
+
+## ⚠️ Known limitations (currently intentional)
+- Contact form stores messages in Supabase (`public.contact_messages`) only; no emails are sent.
+- Email notifications (owner alerts, auto-reply, digests) are deferred. See `BACKLOG.md`.
+
+## 🧪 Local dev tips & conflicts
+- Supabase local uses ports:
+  - API: `54321`, DB: `54322`, Studio: `54323`, Inbucket: `54324`.
+- If ports are in use from another project, stop the other project first, e.g.:
+  ```bash
+  supabase stop --project-id finops-tool
+  ```
+- Vite will auto-pick an available port (e.g., `3006`) if `3000` is busy.
+
+---
+
+## ✉️ Email notifications (optional)
+Edge Function: `send-contact-email` sends an email when invoked after a successful contact form insert.
+
+Environment variables:
+- `EMAIL_TO` — destination address (e.g., `madison@das.consulting`)
+- `EMAIL_FROM` — sender identity (e.g., `noreply@das.consulting`)
+- `RESEND_API_KEY` — optional; if omitted locally, the function logs instead of sending
+
+Local usage:
+1) Ensure Supabase is running: `supabase start`
+2) Serve functions: `supabase functions serve --no-verify-jwt --env-file .env.local`
+3) Submit the form at `/contact` or call:
+   ```bash
+   curl -X POST http://127.0.0.1:54321/functions/v1/send-contact-email \
+     -H 'Content-Type: application/json' \
+     -d '{"message":{"name":"Test","email":"test@example.com","message":"Hello"}}'
+   ```
+   When `RESEND_API_KEY` is not set, the function prints the email payload to the logs.
+
+Production:
+- Set `EMAIL_TO`, `EMAIL_FROM`, and `RESEND_API_KEY` in Vercel. The frontend invokes the function via Supabase Functions API on each successful submission.

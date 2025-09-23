@@ -95,12 +95,12 @@ const CTA = () => {
               Schedule a Call
             </motion.a>
             <motion.a
-              href="mailto:madison@das.consulting"
+              href="/contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="btn-secondary inline-flex items-center gap-3 text-lg px-10 py-4"
             >
-              Send an Email
+              Contact Form
               <ArrowRight size={20} />
             </motion.a>
           </motion.div>
